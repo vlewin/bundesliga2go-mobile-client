@@ -51,7 +51,7 @@ $.indexQueue = function(args) {
 };
 
 function showScoresTable(){
-  console.log("show table")
+  console.log("show table");
   var scores = JSON.parse(localStorage.getItem("scores"));
   var teams = JSON.parse(localStorage.getItem("teams"));
 
@@ -66,18 +66,18 @@ function showScoresTable(){
       '<span class="icon icon-' + teams[scores[i].id].teamShortcut +'"></span>' +
       '<span class="team">' + teams[scores[i].id].teamShortcut + '</span>' +
    '</div>';
-  
+
       table += '<div class="grid_2 tcenter">' + scores[i].played + '</div>';
       table += '<div class="grid_2 tcenter">' + scores[i].won + '</div>';
       table += '<div class="grid_2 tcenter">' + scores[i].lost + '</div>';
       table += '<div class="grid_2 tcenter bold">' + scores[i].points + '</div>';
-      
-      
+
+
 //    table += '<div class="grid_2 tcenter first">' +
 //      '<span class="icon icon-' + teams[scores[i].id].teamShortcut +'"></span>' +
 //      '<span class="numeration">' + i + '</span>' +
 //    '</div>';
-//    
+//
 //    table += '<div class="grid_2 tleft bold">' +  teams[scores[i].id].teamShortcut + '</div>';
 //
 //    table += '<div class="grid_2 tcenter">' + scores[i].played + '</div>';

@@ -12,7 +12,7 @@ $.seasonQueue = function(args) {
             worker.postMessage(args.args);
             failure++;
           } else {
-            dfd.reject(event);
+            dfd.reject();
           }
         } else {
           switch (event.data.key) {
@@ -47,8 +47,7 @@ $.seasonQueue = function(args) {
       };
 
       worker.onerror = function(event) {
-        console.log("FAILED")
-        dfd.reject(event);
+        dfd.reject();
       };
 
       worker.postMessage(args.args); //Start the worker with supplied args
@@ -62,7 +61,7 @@ $.seasonQueue = function(args) {
         switch (args.args.key) {
           case "cmd":
             if(localStorage.getItem("cmd") === null) {
-              localStorage.setItem("cmd", JSON.parse(data).cmd);
+              localStorage.setItem("cmd", data.cmd);
             } else {
               if(data.cmd != localStorage.getItem("cmd")) {
                 localStorage.setItem("cmd", data.cmd);
@@ -104,6 +103,7 @@ $.seasonQueue = function(args) {
 function showMatchDay(matchday){
   var m = JSON.parse(localStorage.getItem("matchday" + matchday));
   var table = '', cssclass;
+  console.log(m)
 
   if(m !== null) {
     for(i=0; i<8; i++) {
@@ -111,13 +111,14 @@ function showMatchDay(matchday){
       m[i].pointsTeam1 != '-1'? points1 = m[i].pointsTeam1 : points1 = '--';
       m[i].pointsTeam2 != '-1'? points2 = m[i].pointsTeam2 : points2 = '--';
 
+      table += '<a href="#match1" class="match">';
       table += '<div class="container_12 ' + cssclass +' ">';
       table += '<div class="grid_1 tleft">&nbsp;</div>';
       table += '<div class="grid_4 tright"><span class="lteamname bold">' + m[i].shortTeam1 + '</span><span class="icon icon-' + m[i].shortTeam1 +'"></span></div>';
       table += '<div class="grid_2 tcenter score">' + points1 + ':' + points2 + '</div>';
       table += '<div class="grid_4 tleft"><span class="icon icon-' + m[i].shortTeam2 +'"></span><span class="rteamname bold">' + m[i].shortTeam2 + '</span></div>';
       table += '<div class="grid_1 tright">&nbsp;</div>';
-      table += '</div>'
+      table += '</div></a>'
     }
   }
 
@@ -126,35 +127,40 @@ function showMatchDay(matchday){
 }
 
 function season(matchday) {
-//  matchday = 13;
+  matchday = 0;
+    if(localStorage.getItem("matchday" + matchday) === null) {
+      matchday !== undefined && matchday !=0? matchday : matchday = localStorage.getItem("cmd");
 
-  if(localStorage.getItem("matchday" + matchday) === null) {
-    matchday !== undefined && matchday !=0? matchday : matchday = localStorage.getItem("cmd");
+      var sworker1 = $.seasonQueue({file: 'js/ajax-worker.js', args: { url: "http://foxhall.de:8088/api/cmd", key: "cmd" }}); //???? CURRENT MATCHDAY ???
+      var sworker2 = $.seasonQueue({file: 'js/ajax-worker.js', args: { url: "http://foxhall.de:8088/api/matchday/", key: "matchday", options: matchday }}); //???? CURRENT MATCHDAY ???
 
-    var sworker1 = $.seasonQueue({file: 'js/ajax-worker.js', args: { url: "http://foxhall.de:8088/api/cmd", key: "cmd" }}); //???? CURRENT MATCHDAY ???
-    var sworker2 = $.seasonQueue({file: 'js/ajax-worker.js', args: { url: "http://foxhall.de:8088/api/matchday/", key: "matchday", options: matchday }}); //???? CURRENT MATCHDAY ???
+      $.when(sworker1, sworker2)
+        .done(function(result1){
+          console.log("Both workers are done, handle data from workers!");
+          showMatchDay(matchday);
+          return true;
+        })
 
-    $.when(sworker1, sworker2)
-      .done(function(result1){
-        console.log("Both workers are done, handle data from workers!");
-        showMatchDay(matchday);
-        return true;
-      })
+        .fail(function(){
+          console.info("SEASON FAILED!!!");
+          return false;
+        });
 
-      .fail(function(data){
-        console.info("HANDLE ERRORS!!!!");
-        return false;
-      });
-
-  } else {
-    console.log("Already synced with server " + matchday);
-    showMatchDay(matchday);
-  }
+    } else {
+      console.log("Already synced with server " + matchday);
+      showMatchDay(matchday);
+    }
 }
 
 function simulateSwipe(args) {
-  var matchday = parseInt($('#matchdayNumberId').html());
-  if(args == "right") {
+  if($('#matchdayNumberId').html() !== undefined) {
+    var matchday = parseInt($('#matchdayNumberId').html());
+  }
+
+  console.log($('#matchdayNumberId').html());
+  console.log(matchday);
+  if(matchday === null) { matchday=0; }
+  if(args == "left") {
     matchday = matchday+1;
     matchday > 34? matchday = 0 : matchday = matchday;
   } else {
@@ -162,4 +168,13 @@ function simulateSwipe(args) {
   }
   season(matchday);
 }
+
+
+//var hasStorage = (function() {
+//      try {
+//        return !!localStorage.getItem;
+//      } catch(e) {
+//        return false;
+//      }
+//    }());
 
