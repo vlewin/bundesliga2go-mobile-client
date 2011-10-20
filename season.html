@@ -1,0 +1,95 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="cleartype" content="on" >
+    <meta http-equiv="imagetoolbar" content="false" />
+    <meta http-equiv="Content-Language" content="de" />
+
+    <meta name="Description" content="TODO ADD DESCRIPTION!!!" />
+    <meta name="copyright" content="TODO ADD Copyright!!!" />
+
+    <meta name="keywords" content="bundesliga,android,apple,iphone,phone" />
+    <meta name="Author" content="Vladislav Lewin &amp; Ciaran Farrell" />
+    <meta name="language" content="Deutsch" />
+
+    <meta name="robots" content="index,follow" />
+    <meta name="revisit-after" content="7 Days" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+<!--    <meta name="MobileOptimized" content="width" />-->
+<!--    <meta name="HandheldFriendly" content="true"/>-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0;" />
+
+<!--    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />-->
+    <link rel="apple-touch-startup-image" href="imgages/time_splash.png" />
+    <link rel="apple-touch-icon-precomposed" href="imgages/time_icon.png"/>
+
+    <title>B2GO</title>
+
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.0rc1.css"/>
+    <link rel="stylesheet" type="text/css" href="css/jquery-mobile-fluid960.css" />
+
+    <link rel="stylesheet" type="text/css" href="css/swatch-z.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" href="css/teamicons.css" />
+
+    <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.0rc1/jquery.mobile-1.0rc1.min.js"></script>
+    <script src="js/jquery.jswipe-0.1.2.js"></script>
+    <script src="js/season.js"></script>
+
+     <script>
+       $(document).ready(function() {
+         index();
+         console.log("INDEX CLICKED");
+
+         $('#indexPage').live('click', function() {
+           console.log("index CLICKED")
+           $.mobile.changePage("index.html")
+           //index();
+         });
+
+         $('#seasonPage').live('click', function() {
+           console.log("season CLICKED")
+           $.mobile.changePage("season.html")
+           //index();
+         });
+
+         $('#tickerPage').live('click', function() {
+           console.log("ticker CLICKED")
+           $.mobile.changePage("ticker.html")
+           //index();
+         });
+        });
+      </script>
+  </head>
+  <body>
+    <div id="seasonPage" class="swipe" data-role="page" data-theme="z">
+      <div data-role="header" data-theme="z">
+        <h1><span id="md"></span> Spieltag</h1>
+      </div>
+
+      <div id="seasonContent" data-role="content">
+
+        <fieldset id="matchdayView">
+
+        </fieldset>
+
+
+      </div>
+
+      <div data-role="footer" data-position="fixed" data-theme="z" >
+        <div data-role="navbar" data-iconpos="top">
+          <ul>
+            <li><a id="indexPage" href="index.html" data-icon="grid">Tabelle</a></li>
+            <li><a id="seasonPage" href="season.html" data-icon="star">Spieltage</a></li>
+            <li><a id="tickerPage" href="ticker.html" data-icon="refresh">Ticker</a></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+  </body>
+</html>
+

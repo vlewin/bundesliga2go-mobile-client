@@ -1,0 +1,37 @@
+span.icon, span.iconb {
+  vertical-align:middle;
+  text-align:center;
+  line-height: 34px;
+  border: 1px solid #fafafa;
+  -webkit-border-radius:30px;
+  -moz-border-radius:30px;
+  background: url(../img/wwe-team-logos-30x30.png) no-repeat top left #fff;
+  width:30px;
+  height:30px;
+}
+
+span.icon {  display:inline-block; }
+span.iconb { display:block; }
+
+span.icon-FCB { background-position: -5px -325px; }
+span.icon-BMG { background-position: -5px -444px; }
+span.icon-BVB { background-position: -5px -485px; }
+span.icon-VFB { background-position: -5px -205px; }
+span.icon-BRE { background-position: -5px -725px; }
+
+span.icon-S04 { background-position: -5px -45px; }
+span.icon-H96 { background-position: -5px -245px; }
+span.icon-B04 { background-position: -5px -525px; }
+span.icon-HOF { background-position: -85px -685px; }
+span.icon-KOE { background-position: -5px -5px; }
+
+span.icon-BSC { background-position: -5px -165px; }
+span.icon-WOB { background-position: -5px -765px; }
+span.icon-FCN { background-position: -5px -645px; }
+span.icon-FCK { background-position: -5px -685px; }
+span.icon-M05 { background-position: -5px -125px; }
+
+span.icon-FCA { background-position: -85px -445px; }
+span.icon-HSV { background-position: -85px -325px; }
+span.icon-SCF { background-position: -5px -285px; }
+

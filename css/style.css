@@ -1,0 +1,37 @@
+.empty { }
+
+.tleft { text-align:left; }
+.tcenter { text-align:center; }
+.tright { text-align:right; }
+.bold { font-weight: bold; }
+.spacer { height:10px; margin:5px 0px; }
+.undeline { height:1px; margin:2px 0px; border-bottom:1px solid #666; }
+
+.row { background:#333; line-height:32px; }
+
+
+.content_header {
+  background:#353535;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2), 0 -2px 0 rgba(0, 0, 0, 0.8);
+  -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.8);
+  border-radius:32px;
+  font-size: 13px;
+  padding:8px 10px!important;
+}
+
+.even, .odd {
+  background: #474747;
+  line-height:32px;
+}
+
+#indexView span.icon { margin-top:2px; }
+#indexView div { line-height:36px; margin:2px 0px; }
+#indexView div.bold { font-weight:bold; text-shadow: 0px -1px #000; }
+#indexView div .score { font-size:24px;}
+
+#seasonView span.lteamname { padding-right: 6px; }
+#seasonView span.rteamname { padding-left: 6px; }
+#seasonView div { line-height:32xpx; margin: 5px 0px; }
+#seasonView .score { line-height:32px; font-size: 24px; }
+#seasonView .score { font-size:24px;}
+

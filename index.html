@@ -1,0 +1,154 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="cleartype" content="on" >
+    <meta http-equiv="imagetoolbar" content="false" />
+    <meta http-equiv="Content-Language" content="de" />
+    <meta name="Description" content="TODO ADD DESCRIPTION!!!" />
+    <meta name="copyright" content="TODO ADD Copyright!!!" />
+    <meta name="keywords" content="bundesliga,android,apple,iphone,phone" />
+    <meta name="Author" content="Vladislav Lewin &amp; Ciaran Farrell" />
+    <meta name="language" content="Deutsch" />
+    <meta name="robots" content="index,follow" />
+    <meta name="revisit-after" content="7 Days" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0;" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-startup-image" href="imgages/time_splash.png" />
+    <link rel="apple-touch-icon-precomposed" href="imgages/time_icon.png"/>
+
+    <title>Bundesliga2Go</title>
+
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.0rc1.css"/>
+    <link rel="stylesheet" type="text/css" href="css/jquery-mobile-fluid960.css" />
+    <link rel="stylesheet" type="text/css" href="css/swatch-z.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" href="css/teamicons.css" />
+
+    <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.0rc1/jquery.mobile-1.0rc1.min.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/season.js"></script>
+    <script>
+      $(document).ready(function() {
+        index();
+        season();
+
+        $('#indexLink').live('click', function() {
+          index();
+          $.mobile.changePage($("#indexPage"));
+        });
+
+        $('#seasonLink').bind('click', function() {
+          season();
+          $.mobile.changePage($("#seasonPage"));
+        });
+
+        $('#tickerLink').live('click', function() {
+          $.mobile.changePage($("#tickerPage"));
+        });
+
+        var isAlt=false
+        $( "#seasonPage" )
+          .live('swipeleft',function() {
+            console.log("swipeleft");
+          })
+
+          .live('swiperight',function() {
+            console.log("swiperight");
+          })
+
+          .keyup(function (event) {
+            if(event.which == 18) isAlt=false;
+          })
+
+          .keydown(function (event) {
+            if(event.which == 18) isAlt=true;
+            if(event.which == 34 && isAlt == true) {
+              simulateSwipe('left');
+            }
+
+            if(event.which == 33 && isAlt == true) {
+              simulateSwipe('right');
+            }
+          })
+      });
+      </script>
+
+  </head>
+  <body>
+    <div id="indexPage" data-role="page" data-theme="z">
+      <div data-role="header" data-theme="z">
+        <h1>INDEX</h1>
+      </div>
+
+      <div data-role="content" id="index-content">
+<!--        <fieldset class="container_12 content_header">-->
+<!--          <div class="grid_2 tcenter">{I}</div>-->
+<!--          <div class="grid_2 tleft">TEAM</div>-->
+<!--          <div class="grid_2 tcenter">Spiele</div>-->
+<!--          <div class="grid_2 tcenter">Siege</div>-->
+<!--          <div class="grid_2 tcenter">Nieder</div>-->
+<!--          <div class="grid_2 tcenter">Punkte</div>-->
+<!--        </fieldset>-->
+
+<!--        <div class="spacer"></div>-->
+
+        <fieldset id="indexView" class="container_12" style="padding:4px 10px;">
+        </fieldset>
+      </div>
+
+      <div data-role="footer" data-theme="z" >
+        <div data-role="navbar" data-iconpos="top">
+          <ul>
+            <li><a id="indexLink" href="#" class="ui-btn-active" data-icon="grid">Tabelle</a></li>
+            <li><a id="seasonLink" href="#" data-icon="star">Spieltage</a></li>
+            <li><a id="tickerLink" href="#" data-icon="refresh">Ticker</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="seasonPage" data-role="page" data-theme="z">
+      <div data-role="header" data-theme="z">
+        <h1><span id="matchdayNumberId"></span> Spieltag</h1>
+      </div>
+
+      <div data-role="content">
+        <fieldset id="seasonView" class="container_12" style="padding:4px 10px;"></fieldset>
+      </div>
+
+      <div data-role="footer" data-theme="z" >
+        <div data-role="navbar" data-iconpos="top">
+          <ul>
+            <li id="indexLink"><a href="#" data-icon="grid">Tabelle</a></li>
+            <li id="seasonLink"><a href="#" data-icon="star">Spieltage</a></li>
+            <li id="tickerLink"><a href="#" data-icon="refresh">Ticker</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div id="tickerPage" data-role="page" data-theme="z">
+      <div data-role="header" data-theme="z">
+        <h1>TICKER PAGE</h1>
+      </div>
+
+      <div data-role="content">
+        <fieldset id="seasonView" class="container_12" style="padding:4px 10px;"></fieldset>
+      </div>
+
+      <div data-role="footer" data-theme="z" >
+        <div data-role="navbar" data-iconpos="top">
+          <ul>
+            <li id="indexLink"><a href="#indexPage" data-icon="grid">Tabelle</a></li>
+            <li id="seasonLink"><a href="#seasonPage" data-icon="star">Spieltage</a></li>
+            <li id="tickerLink"><a href="#tickerPage" data-icon="refresh">Ticker</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>
+
