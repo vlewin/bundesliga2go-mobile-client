@@ -64,14 +64,27 @@
 
           .keydown(function (event) {
             if(event.which == 18) isAlt=true;
-            if(event.which == 34 && isAlt == true) {
+            if(event.which == 40 && isAlt == true) {
               simulateSwipe('left');
             }
 
-            if(event.which == 33 && isAlt == true) {
+            if(event.which == 38 && isAlt == true) {
               simulateSwipe('right');
             }
           })
+          
+//          .keydown(function (event) {
+//            if(event.which == 18) isAlt=true;
+//            if(event.which == 34 && isAlt == true) {
+//             simulateSwipe('left');
+//            }
+//          
+//            if(event.which == 33 && isAlt == true) {
+//              simulateSwipe('right');
+//            }
+//          })
+//          
+          
       });
       </script>
 
@@ -79,22 +92,22 @@
   <body>
     <div id="indexPage" data-role="page" data-theme="z">
       <div data-role="header" data-theme="z">
-        <h1>INDEX</h1>
+        <h1>Tabelle</h1>
       </div>
 
       <div data-role="content" id="index-content">
-<!--        <fieldset class="container_12 content_header">-->
-<!--          <div class="grid_2 tcenter">{I}</div>-->
-<!--          <div class="grid_2 tleft">TEAM</div>-->
-<!--          <div class="grid_2 tcenter">Spiele</div>-->
-<!--          <div class="grid_2 tcenter">Siege</div>-->
-<!--          <div class="grid_2 tcenter">Nieder</div>-->
-<!--          <div class="grid_2 tcenter">Punkte</div>-->
-<!--        </fieldset>-->
+        <fieldset class="container_12 content_header">
+          <div class="grid_1 tcenter" style="color:#999;">#</div>
+          <div class="grid_3 tleft">Mannschaft</div>
+          <div class="grid_2 tcenter">Spiele</div>
+          <div class="grid_2 tcenter">Siege</div>
+          <div class="grid_2 tcenter">Nieder</div>
+          <div class="grid_2 tcenter">Punkte</div>
+        </fieldset>
 
 <!--        <div class="spacer"></div>-->
 
-        <fieldset id="indexView" class="container_12" style="padding:4px 10px;">
+        <fieldset id="indexView" class="container_12">
         </fieldset>
       </div>
 

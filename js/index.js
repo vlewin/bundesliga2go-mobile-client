@@ -57,13 +57,33 @@ function showScoresTable(){
 
   var table = '';
   for(i=0; i<18; i++) {
-    table += '<div class="grid_2 tcenter"><span class="icon icon-' + teams[scores[i].id].teamShortcut +'"></span></div>';
-    table += '<div class="grid_2 tleft bold">' +  teams[scores[i].id].teamShortcut + '</div>';
-
-    table += '<div class="grid_2 tcenter">' + scores[i].played + '</div>';
-    table += '<div class="grid_2 tcenter">' + scores[i].won + '</div>';
-    table += '<div class="grid_2 tcenter">' + scores[i].lost + '</div>';
-    table += '<div class="grid_2 tcenter bold">' + scores[i].points + '</div>';
+    if(i<3) {
+      table += '<div class="grid_1 tcenter"><span class="number best">' + (i+1) + '</span></div>';
+    } else {
+      table += '<div class="grid_1 tcenter"><span class="number">' + (i+1) +'</span></div>';
+    }
+    table += '<div class="grid_3 tleft bold">' +
+      '<span class="icon icon-' + teams[scores[i].id].teamShortcut +'"></span>' +
+      '<span class="team">' + teams[scores[i].id].teamShortcut + '</span>' +
+   '</div>';
+  
+      table += '<div class="grid_2 tcenter">' + scores[i].played + '</div>';
+      table += '<div class="grid_2 tcenter">' + scores[i].won + '</div>';
+      table += '<div class="grid_2 tcenter">' + scores[i].lost + '</div>';
+      table += '<div class="grid_2 tcenter bold">' + scores[i].points + '</div>';
+      
+      
+//    table += '<div class="grid_2 tcenter first">' +
+//      '<span class="icon icon-' + teams[scores[i].id].teamShortcut +'"></span>' +
+//      '<span class="numeration">' + i + '</span>' +
+//    '</div>';
+//    
+//    table += '<div class="grid_2 tleft bold">' +  teams[scores[i].id].teamShortcut + '</div>';
+//
+//    table += '<div class="grid_2 tcenter">' + scores[i].played + '</div>';
+//    table += '<div class="grid_2 tcenter">' + scores[i].won + '</div>';
+//    table += '<div class="grid_2 tcenter">' + scores[i].lost + '</div>';
+//    table += '<div class="grid_2 tcenter bold">' + scores[i].points + '</div>';
 
     var tmp = i+1;
 

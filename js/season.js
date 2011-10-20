@@ -112,11 +112,11 @@ function showMatchDay(matchday){
       m[i].pointsTeam2 != '-1'? points2 = m[i].pointsTeam2 : points2 = '--';
 
       table += '<div class="container_12 ' + cssclass +' ">';
-      table += '<div class="grid_1 tleft">#</div>';
+      table += '<div class="grid_1 tleft">&nbsp;</div>';
       table += '<div class="grid_4 tright"><span class="lteamname bold">' + m[i].shortTeam1 + '</span><span class="icon icon-' + m[i].shortTeam1 +'"></span></div>';
       table += '<div class="grid_2 tcenter score">' + points1 + ':' + points2 + '</div>';
       table += '<div class="grid_4 tleft"><span class="icon icon-' + m[i].shortTeam2 +'"></span><span class="rteamname bold">' + m[i].shortTeam2 + '</span></div>';
-      table += '<div class="grid_1 tright">#</div>';
+      table += '<div class="grid_1 tright">&nbsp;</div>';
       table += '</div>'
     }
   }
