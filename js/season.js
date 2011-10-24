@@ -4,6 +4,9 @@ $.seasonQueue = function(args) {
     var failure=0;
 
     if (window.Worker) {
+//    if (!true) {
+      console.log("AJAX call through web workers")
+    
       var worker = new Worker("js/ajax-worker.js");
 
       worker.onmessage = function(event) {
@@ -17,23 +20,40 @@ $.seasonQueue = function(args) {
         } else {
           switch (event.data.key) {
             case "cmd":
+              var cmd = JSON.parse(event.data.json).cmd;
+              
               if(localStorage.getItem("cmd") === null) {
-                localStorage.setItem("cmd", JSON.parse(event.data.json).cmd);
+                console.log("CMD is not set, set CMD to " + cmd); 
+                localStorage.setItem("cmd", cmd);
               } else {
-                if(JSON.parse(event.data.json).cmd != localStorage.getItem("cmd")) {
-                  localStorage.setItem("cmd", JSON.parse(event.data.json).cmd);
+                
+                if(cmd != localStorage.getItem("cmd")) {
+                  console.log("CMD is outdated, new CMD is " + cmd);
+                  localStorage.setItem("cmd", cmd);
+                } else {
+                  console.log("CMD is up-to-date " + cmd);         
                 }
               }
 
               break;
 
             case "matchday":
-              if(event.data.options == "0") {
+              console.log("GET MATCHDAY FROM SERVER");
+              console.log(JSON.parse(event.data.json)[0].matchIsFinished) /// get string instead of object ???
+              console.log(typeof(JSON.parse(event.data.json)[0].matchIsFinished))
+              
+              if(event.data.options == "0") { 
                 var key = event.data.key + localStorage.getItem("cmd");
+              } else {
+                var key = event.data.key + event.data.options;
+              }
+              
+              if(JSON.parse(event.data.json)[0].matchIsFinished) {
+                console.log("match date is finished");
                 localStorage.setItem(key, event.data.json);
               } else {
-                var key = event.data.key + event.data.options;
-                localStorage.setItem(key, event.data.json);
+                console.log("match date is not finished");
+                sessionStorage.setItem(key, event.data.json);  
               }
 
               break;
@@ -54,6 +74,7 @@ $.seasonQueue = function(args) {
       worker.postMessage(args.args); //Start the worker with supplied args
 
     } else {
+      console.log("AJAX call in main thread")
       if(args.args.key == "matchday") { args.args.url = args.args.url + args.args.options; }
       var request = $.getJSON(args.args.url);
 
@@ -61,23 +82,48 @@ $.seasonQueue = function(args) {
 
         switch (args.args.key) {
           case "cmd":
+            console.log(data.cmd)
+            var cmd = data.cmd;
+          
             if(localStorage.getItem("cmd") === null) {
-              localStorage.setItem("cmd", JSON.parse(data).cmd);
+              console.log("CMD is not set " + cmd);  
+              console.log("Typeof " + typeof(cmd) + " value " + cmd)            
+              localStorage.setItem("cmd", JSON.stringify(data.cmd));
             } else {
-              if(data.cmd != localStorage.getItem("cmd")) {
-                localStorage.setItem("cmd", data.cmd);
+              if(cmd != localStorage.getItem("cmd")) {
+                console.log("CMD is outdated, new CMD is " + cmd);
+                console.log("Typeof " + typeof(cmd) + " value " + cmd)
+                localStorage.setItem("cmd", JSON.stringify(data.cmd));
               }
             }
 
             break;
 
-          case "matchday":
-            if(args.args.options == "0") {
+          case "matchday":   
+            console.log(typeof(data))
+              
+//            if(args.args.options == "0") {
+//              console.log("Matchday is undefined, get current matchday " + args.args.options);
+//              var key = args.args.key + localStorage.getItem("cmd");
+//              localStorage.setItem(key, JSON.stringify(data));
+//            } else {
+//              console.log("Matchday is defined, get matchday " + args.args.options);
+//              var key = args.args.key + args.args.options;
+//              localStorage.setItem(key, JSON.stringify(data));
+//            }
+            
+            if(args.args.options == "0") { 
               var key = args.args.key + localStorage.getItem("cmd");
+            } else {
+              var key = args.args.key + args.args.options;
+            }
+            
+            if(data[0].matchIsFinished) {
+              console.log("match date is finished");
               localStorage.setItem(key, JSON.stringify(data));
             } else {
-              var key = args.args.key + args.args.options;
-              localStorage.setItem(key, JSON.stringify(data));
+              console.log("match date is not finished");
+              sessionStorage.setItem(key, JSON.stringify(data));  
             }
 
             break;
@@ -102,15 +148,33 @@ $.seasonQueue = function(args) {
 };
 
 function showMatchDay(matchday){
-  var m = JSON.parse(localStorage.getItem("matchday" + matchday));
-  var table = '', cssclass;
-
-  if(m !== null) {
+  console.log("show matchday " + matchday);
+  if(matchday == 0) { matchday = JSON.parse(localStorage.getItem("cmd")); }
+  
+  var key = "matchday" + matchday;
+  if(key in localStorage) {
+    console.log("key in ls")
+    var m = JSON.parse(localStorage.getItem(key));  
+  } else if(key in sessionStorage) {
+    console.log("key in ss")
+    var m = JSON.parse(sessionStorage.getItem(key));    
+  } else {
+    console.log("key not found " + key)
+    m = null;
+  }
+  
+  var table = '';
+  var cssclass;
+  
+  
+  if(m != null) {
     for(i=0; i<8; i++) {
       i%2==0?  cssclass = 'even' : cssclass = 'odd';
       m[i].pointsTeam1 != '-1'? points1 = m[i].pointsTeam1 : points1 = '--';
       m[i].pointsTeam2 != '-1'? points2 = m[i].pointsTeam2 : points2 = '--';
 
+
+      table += '<a href="' + m[i].matchID + '">'
       table += '<div class="container_12 ' + cssclass +' ">';
       table += '<div class="grid_1 tleft">&nbsp;</div>';
       table += '<div class="grid_4 tright"><span class="lteamname bold">' + m[i].shortTeam1 + '</span><span class="icon icon-' + m[i].shortTeam1 +'"></span></div>';
@@ -118,6 +182,9 @@ function showMatchDay(matchday){
       table += '<div class="grid_4 tleft"><span class="icon icon-' + m[i].shortTeam2 +'"></span><span class="rteamname bold">' + m[i].shortTeam2 + '</span></div>';
       table += '<div class="grid_1 tright">&nbsp;</div>';
       table += '</div>'
+      table += '</a>';
+      
+      appendMatchPage(m[i]);
     }
   }
 
@@ -125,14 +192,45 @@ function showMatchDay(matchday){
   $('#seasonView').html(table);
 }
 
+function appendMatchPage(data){
+  console.log(data.matchID);
+  
+  var page = '';
+  
+  page += '<div id=' + data.matchID + ' data-role="page" data-theme="z">';
+  page += '<div data-role="header" data-theme="z">' + data.matchID + '</div>';
+  page += '</div>';
+  
+  $('#seasonPage').after(page);
+}
+
+
+//<div id="tickerPage" data-role="page" data-theme="z">
+//  <div data-role="header" data-theme="z">
+//    <h1>TICKER PAGE</h1>
+//  </div>
+//  <div data-role="content">
+//    <fieldset id="seasonView" class="container_12" style="padding:4px 10px;"></fieldset>
+//  </div>
+//</div>
+
+
 function season(matchday) {
-//  matchday = 13;
+  var key = "matchday" + matchday;
+  var synced = false;
+  
+  if(key in localStorage || key in sessionStorage) { synced = true; }
 
-  if(localStorage.getItem("matchday" + matchday) === null) {
-    matchday !== undefined && matchday !=0? matchday : matchday = localStorage.getItem("cmd");
-
-    var sworker1 = $.seasonQueue({file: 'js/ajax-worker.js', args: { url: "http://foxhall.de:8088/api/cmd", key: "cmd" }}); //???? CURRENT MATCHDAY ???
-    var sworker2 = $.seasonQueue({file: 'js/ajax-worker.js', args: { url: "http://foxhall.de:8088/api/matchday/", key: "matchday", options: matchday }}); //???? CURRENT MATCHDAY ???
+  if(synced != true) {
+    var sworker1 = $.seasonQueue({
+      file: 'js/ajax-worker.js', 
+      args: { url: "http://foxhall.de:8088/api/cmd", key: "cmd" }
+    }); 
+    
+    var sworker2 = $.seasonQueue({
+      file: 'js/ajax-worker.js', 
+      args: { url: "http://foxhall.de:8088/api/matchday/", key: "matchday", options: matchday }
+    });
 
     $.when(sworker1, sworker2)
       .done(function(result1){

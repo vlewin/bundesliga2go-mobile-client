@@ -31,8 +31,11 @@
     <script src="js/season.js"></script>
     <script>
       $(document).ready(function() {
+        localStorage.clear();
+        sessionStorage.clear();
+        
         index();
-        season();
+        season(0);
 
         $('#indexLink').live('click', function() {
           index();
@@ -40,7 +43,7 @@
         });
 
         $('#seasonLink').bind('click', function() {
-          season();
+          season(0);
           $.mobile.changePage($("#seasonPage"));
         });
 
@@ -105,10 +108,7 @@
           <div class="grid_2 tcenter">Punkte</div>
         </fieldset>
 
-<!--        <div class="spacer"></div>-->
-
-        <fieldset id="indexView" class="container_12">
-        </fieldset>
+        <fieldset id="indexView" class="container_12"> <!-- scores table --></fieldset>
       </div>
 
       <div data-role="footer" data-theme="z" >
@@ -124,7 +124,7 @@
 
     <div id="seasonPage" data-role="page" data-theme="z">
       <div data-role="header" data-theme="z">
-        <h1><span id="matchdayNumberId"></span> Spieltag</h1>
+        <h1><span id="matchdayNumberId">0</span> Spieltag</h1>
       </div>
 
       <div data-role="content">

@@ -3,8 +3,9 @@ function ajaxCall(url, key, options) {
 
   var xhr = new XMLHttpRequest();
   xhr.open('GET', url, true);
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+//  xhr.setRequestHeader('Content-Type', 'application/json');
+//  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.setRequestHeader("Content-type", "application/json; charset=utf-8");
   xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
   xhr.send();
 
