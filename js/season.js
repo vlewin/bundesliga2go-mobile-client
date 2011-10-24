@@ -149,15 +149,21 @@ $.seasonQueue = function(args) {
 
 function showMatchDay(matchday){
   console.log("show matchday " + matchday);
+  
   if(matchday == 0) { matchday = JSON.parse(localStorage.getItem("cmd")); }
   
   var key = "matchday" + matchday;
+  var storage;
+  
   if(key in localStorage) {
     console.log("key in ls")
     var m = JSON.parse(localStorage.getItem(key));  
+    storage = "local";
+    
   } else if(key in sessionStorage) {
     console.log("key in ss")
     var m = JSON.parse(sessionStorage.getItem(key));    
+    storage = "session";
   } else {
     console.log("key not found " + key)
     m = null;
@@ -173,8 +179,9 @@ function showMatchDay(matchday){
       m[i].pointsTeam1 != '-1'? points1 = m[i].pointsTeam1 : points1 = '--';
       m[i].pointsTeam2 != '-1'? points2 = m[i].pointsTeam2 : points2 = '--';
 
+      args = { "key" : key, "position" : i, "strorage" : storage };
 
-      table += '<a href="' + m[i].matchID + '">'
+      table += '<a href="#" data-key="' + key + '" data-position="' + i + '" data-storage="' + storage + '">';
       table += '<div class="container_12 ' + cssclass +' ">';
       table += '<div class="grid_1 tleft">&nbsp;</div>';
       table += '<div class="grid_4 tright"><span class="lteamname bold">' + m[i].shortTeam1 + '</span><span class="icon icon-' + m[i].shortTeam1 +'"></span></div>';
@@ -183,8 +190,6 @@ function showMatchDay(matchday){
       table += '<div class="grid_1 tright">&nbsp;</div>';
       table += '</div>'
       table += '</a>';
-      
-      appendMatchPage(m[i]);
     }
   }
 
@@ -192,18 +197,29 @@ function showMatchDay(matchday){
   $('#seasonView').html(table);
 }
 
-function appendMatchPage(data){
-  console.log(data.matchID);
-  
-  var page = '';
-  
-  page += '<div id=' + data.matchID + ' data-role="page" data-theme="z">';
-  page += '<div data-role="header" data-theme="z">' + data.matchID + '</div>';
-  page += '</div>';
-  
-  $('#seasonPage').after(page);
-}
+//function appendMatchPage(key, position, storage){
+//  console.log("Key " + key + " at position " + " stored in " + + " Storage" );
+//  var data = "";
+//  
+//  
+//  $('#matchPage').html(data);
+//  $.mobile.changePage($("#matchPage"))
+//}
 
+$('#seasonView a').live('click', function(){
+  console.log("clicked");
+  var key = $(this).data('key');
+  var position = $(this).data('position');
+  var storage = $(this).data('storage');
+  
+  if(storage == "local") {
+    var data = JSON.parse(localStorage.getItem(key))[position];
+    console.log(data);
+  }
+  
+  $("#matchContent").html(data.matchID);
+  $.mobile.changePage($("#matchPage"));
+});
 
 //<div id="tickerPage" data-role="page" data-theme="z">
 //  <div data-role="header" data-theme="z">
