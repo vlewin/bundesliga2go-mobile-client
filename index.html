@@ -29,13 +29,10 @@
     <script src="http://code.jquery.com/mobile/1.0rc1/jquery.mobile-1.0rc1.min.js"></script>
     <script src="js/index.js"></script>
     <script src="js/season.js"></script>
-    <script src="js/ticker.js"></script>
     <script>
       $(document).ready(function() {
-        $.mobile.page.prototype.options.backBtnText = "Zurück";
-
         index();
-        season(0);
+        season();
 
         $('#indexLink').live('click', function() {
           index();
@@ -43,23 +40,22 @@
         });
 
         $('#seasonLink').bind('click', function() {
-          season(0);
+          season();
           $.mobile.changePage($("#seasonPage"));
         });
 
         $('#tickerLink').live('click', function() {
-          ticker();
           $.mobile.changePage($("#tickerPage"));
         });
 
         var isAlt=false
         $( "#seasonPage" )
           .live('swipeleft',function() {
-            simulateSwipe('left');
+            console.log("swipeleft");
           })
 
           .live('swiperight',function() {
-            simulateSwipe('right');
+            console.log("swiperight");
           })
 
           .keyup(function (event) {
@@ -69,13 +65,26 @@
           .keydown(function (event) {
             if(event.which == 18) isAlt=true;
             if(event.which == 40 && isAlt == true) {
-              simulateSwipe('right');
+              simulateSwipe('left');
             }
 
             if(event.which == 38 && isAlt == true) {
-              simulateSwipe('left');
+              simulateSwipe('right');
             }
           })
+          
+//          .keydown(function (event) {
+//            if(event.which == 18) isAlt=true;
+//            if(event.which == 34 && isAlt == true) {
+//             simulateSwipe('left');
+//            }
+//          
+//            if(event.which == 33 && isAlt == true) {
+//              simulateSwipe('right');
+//            }
+//          })
+//          
+          
       });
       </script>
 
@@ -96,14 +105,16 @@
           <div class="grid_2 tcenter">Punkte</div>
         </fieldset>
 
+<!--        <div class="spacer"></div>-->
+
         <fieldset id="indexView" class="container_12">
         </fieldset>
       </div>
 
-      <div data-role="footer" data-position="fixed" data-theme="z" >
-        <div data-role="navbar" data-position="fixed" data-iconpos="top">
+      <div data-role="footer" data-theme="z" >
+        <div data-role="navbar" data-iconpos="top">
           <ul>
-            <li><a id="indexLink" href="#" class="ui-btn-active-z" data-icon="grid">Tabelle</a></li>
+            <li><a id="indexLink" href="#" class="ui-btn-active" data-icon="grid">Tabelle</a></li>
             <li><a id="seasonLink" href="#" data-icon="star">Spieltage</a></li>
             <li><a id="tickerLink" href="#" data-icon="refresh">Ticker</a></li>
           </ul>
@@ -113,88 +124,22 @@
 
     <div id="seasonPage" data-role="page" data-theme="z">
       <div data-role="header" data-theme="z">
-        <h1><span id="matchdayNumberId">0</span> Spieltag</h1>
+        <h1><span id="matchdayNumberId"></span> Spieltag</h1>
       </div>
 
       <div data-role="content">
-        <fieldset id="seasonView" class="container_12"></fieldset>
+        <fieldset id="seasonView" class="container_12" style="padding:4px 10px;"></fieldset>
       </div>
 
-      <div data-role="footer" data-position="fixed" data-theme="z" >
-        <div data-role="navbar" data-position="fixed" data-iconpos="top">
+      <div data-role="footer" data-theme="z" >
+        <div data-role="navbar" data-iconpos="top">
           <ul>
             <li id="indexLink"><a href="#" data-icon="grid">Tabelle</a></li>
-            <li id="seasonLink" class="ui-li-active"><a href="#" class="ui-btn-active-z" data-icon="star">Spieltage</a></li>
+            <li id="seasonLink"><a href="#" data-icon="star">Spieltage</a></li>
             <li id="tickerLink"><a href="#" data-icon="refresh">Ticker</a></li>
           </ul>
         </div>
       </div>
-    </div>
-
-    <div id="match1" class="matchView" data-role="page" data-add-back-btn="true" data-theme="z">
-      <div data-role="header" data-theme="z">
-        <h1>MATCH1</h1>
-      </div>
-
-      <div data-role="content">
-        <fieldset class="container_12 content_header">
-          <div class="grid_12 tcenter">Fr, 20.11.2011 15:30</div>
-        </fieldset>
-
-        <div class="spacer"></div>
-
-        <fieldset class="container_12 content_header">
-
-          <div class="grid_5 tleft">
-            <span class="lteamname bold">HOF</span>
-            <span class="icon icon-HOF"></span>
-          </div>
-
-          <div class="grid_2 tcenter score">
-              1:1
-          </div>
-
-          <div class="grid_5 tright">
-            <span class="icon icon-FCB"></span>
-            <span class="lteamname bold">FCB</span>
-          </div>
-
-
-          <div class="spacer"></div>
-          <br>
-          <div class="spacer"></div>
-
-          <div class="grid_5 tleft">
-            <span class="scorer">Gomez<span class="arrow-right"></span></span>
-          </div>
-
-          <div class="grid_2 tcenter score">
-            20''
-          </div>
-
-          <div class="grid_5 tleft">
-            &nbsp;
-          </div>
-
-          <div class="spacer"></div>
-          <br>
-          <div class="spacer"></div>
-
-          <div class="grid_5 tright">
-            &nbsp;
-          </div>
-
-          <div class="grid_2 tcenter score">
-            40''
-          </div>
-
-          <div class="grid_5 tright">
-            <span class="scorer">Schweinsteiger<span class="arrow-left"></span></span>
-          </div>
-
-          </fieldset>
-      </div>
-
     </div>
 
     <div id="tickerPage" data-role="page" data-theme="z">
@@ -203,15 +148,15 @@
       </div>
 
       <div data-role="content">
-        <fieldset id="tickerView" class="container_12"></fieldset>
+        <fieldset id="seasonView" class="container_12" style="padding:4px 10px;"></fieldset>
       </div>
 
-      <div data-role="footer" data-position="fixed" data-theme="z" >
-        <div data-role="navbar" data-position="fixed" data-iconpos="top">
+      <div data-role="footer" data-theme="z" >
+        <div data-role="navbar" data-iconpos="top">
           <ul>
             <li id="indexLink"><a href="#indexPage" data-icon="grid">Tabelle</a></li>
             <li id="seasonLink"><a href="#seasonPage" data-icon="star">Spieltage</a></li>
-            <li id="tickerLink"><a href="#tickerPage" class="ui-btn-active-z" data-icon="refresh">Ticker</a></li>
+            <li id="tickerLink"><a href="#tickerPage" data-icon="refresh">Ticker</a></li>
           </ul>
         </div>
       </div>
