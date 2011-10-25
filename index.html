@@ -31,9 +31,9 @@
     <script src="js/season.js"></script>
     <script>
       $(document).ready(function() {
-        localStorage.clear();
-        sessionStorage.clear();
-        
+//        localStorage.clear();
+//        sessionStorage.clear();
+
         index();
         season(0);
 
@@ -55,10 +55,12 @@
         $( "#seasonPage" )
           .live('swipeleft',function() {
             console.log("swipeleft");
+            simulateSwipe('left');
           })
 
           .live('swiperight',function() {
             console.log("swiperight");
+            simulateSwipe('right');
           })
 
           .keyup(function (event) {
@@ -68,26 +70,13 @@
           .keydown(function (event) {
             if(event.which == 18) isAlt=true;
             if(event.which == 40 && isAlt == true) {
-              simulateSwipe('left');
+              simulateSwipe('right');
             }
 
             if(event.which == 38 && isAlt == true) {
-              simulateSwipe('right');
+              simulateSwipe('left');
             }
           })
-          
-//          .keydown(function (event) {
-//            if(event.which == 18) isAlt=true;
-//            if(event.which == 34 && isAlt == true) {
-//             simulateSwipe('left');
-//            }
-//          
-//            if(event.which == 33 && isAlt == true) {
-//              simulateSwipe('right');
-//            }
-//          })
-//          
-          
       });
       </script>
 
@@ -141,18 +130,21 @@
         </div>
       </div>
     </div>
-    
-    <div id="matchPage" data-role="page" data-theme="z">
-      <div data-role="header" data-theme="z">
-        <h1>Macth PAGE</h1>
+
+    <div id="matchPage" data-role="page" data-add-back-btn="true" data-theme="z">
+      <div class="header" data-role="header" data-theme="z">
+        <h1>Spiel Ergebnis</h1>
       </div>
-    
-      <div data-role="content">
+
+      <div id="matchView" data-role="content">
+        <fieldset class="container_12 content_header">
+          <div class="grid_12 tcenter">Fr, 20.11.2011 15:30</div>
+        </fieldset>
         <fieldset id="matchContent" class="container_12" style="padding:4px 10px;"></fieldset>
       </div>
-    
+
    </div>
-    
+
 
     <div id="tickerPage" data-role="page" data-theme="z">
       <div data-role="header" data-theme="z">
