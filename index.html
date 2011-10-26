@@ -31,9 +31,6 @@
     <script src="js/season.js"></script>
     <script>
       $(document).ready(function() {
-//        localStorage.clear();
-  //      sessionStorage.clear();
-
         index();
         season(0);
 
@@ -170,7 +167,8 @@
       </div>
 
       <div data-role="content">
-        <a href="#" data-role="button" data-iconpos="right" data-icon="minus">Favoriten zurücksetzen</a>
+        <a href="#" id="resetFavorites" data-role="button" data-iconpos="right" data-icon="minus">Favoriten zurücksetzen</a>
+        <a href="#" id="resetCache" data-role="button" data-iconpos="right" data-icon="minus">Cache löschen</a>
       </div>
 
       <div class="footer" data-role="footer" data-position="fixed" data-theme="z" >

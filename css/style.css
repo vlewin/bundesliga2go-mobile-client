@@ -32,17 +32,35 @@
 #indexView div .score { font-size:24px;}
 #indexView .number { display: inline-block; color: #999; font-size:9px; }
 #indexView .best {
-  color: #222;
+  color: #000;
+  text-align:center;
   font-weight: bold;
   background:yellow;
-  width: 12px;
-  height: 12px;
-  padding: 3;
-  line-height:14px;
+  width: 16px;
+  height: 16px;
+  line-height:16px;
   text-shadow: 0px 1px #fff;
-  margin-top: 9px;
-  border-radius:15px;
+/*  text-shadow: none;*/
   opacity:0.4;
+  font-size:8px;
+  margin-top: 10px;
+  border-radius:16px;
+}
+
+#indexView .fav {
+  color: #fff;
+  text-align:center;
+  font-weight: bold;
+  background:#666;
+  width: 16px;
+  height: 16px;
+  line-height:16px;
+  text-shadow: 0px 1px #fff;
+  text-shadow: none;
+  opacity:0.4;
+  font-size:8px;
+  margin-top: 10px;
+  border-radius:16px;
 }
 
 #seasonView .match { background: #474747; line-height:32px;  border-radius:3px; border:1px solid #2a2a2a; }

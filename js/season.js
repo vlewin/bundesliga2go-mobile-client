@@ -102,16 +102,6 @@ $.seasonQueue = function(args) {
           case "matchday":
             console.log(typeof(data))
 
-//            if(args.args.options == "0") {
-//              console.log("Matchday is undefined, get current matchday " + args.args.options);
-//              var key = args.args.key + localStorage.getItem("cmd");
-//              localStorage.setItem(key, JSON.stringify(data));
-//            } else {
-//              console.log("Matchday is defined, get matchday " + args.args.options);
-//              var key = args.args.key + args.args.options;
-//              localStorage.setItem(key, JSON.stringify(data));
-//            }
-
             if(args.args.options == "0") {
               var key = args.args.key + localStorage.getItem("cmd");
             } else {
@@ -152,7 +142,7 @@ function showMatchDay(matchday){
 
   if(matchday == 0) { matchday = JSON.parse(localStorage.getItem("cmd")); }
 
-  matchday = 10;
+//  matchday = 10;
   var key = "matchday" + matchday;
   var storage;
 
