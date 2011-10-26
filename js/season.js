@@ -152,6 +152,7 @@ function showMatchDay(matchday){
 
   if(matchday == 0) { matchday = JSON.parse(localStorage.getItem("cmd")); }
 
+  matchday = 10;
   var key = "matchday" + matchday;
   var storage;
 
@@ -170,21 +171,30 @@ function showMatchDay(matchday){
   }
 
   var html = '';
+  var date, finished = false;
   var cssclass;
 
   if(m != null) {
     for(i=0; i<8; i++) {
-      i%2==0?  cssclass = 'even' : cssclass = 'odd';
+      m[i].matchIsFinished? finished = true : date = m[i].matchDateTime;
+
+//      i%2==0?  cssclass = 'even' : cssclass = 'odd';
       m[i].pointsTeam1 != '-1'? points1 = m[i].pointsTeam1 : points1 = '--';
       m[i].pointsTeam2 != '-1'? points2 = m[i].pointsTeam2 : points2 = '--';
 
       html += '<a href="#" data-key="' + key + '" data-position="' + i + '" data-storage="' + storage + '">';
-      html += '<div class="container_12 ' + cssclass +' ">';
-      html += '<div class="grid_1 tleft">&nbsp;</div>';
-      html += '<div class="grid_4 tright"><span class="lteamname bold">' + m[i].shortTeam1 + '</span><span class="icon icon-' + m[i].shortTeam1 +'"></span></div>';
-      html += '<div class="grid_2 tcenter score">' + points1 + ':' + points2 + '</div>';
-      html += '<div class="grid_4 tleft"><span class="icon icon-' + m[i].shortTeam2 +'"></span><span class="rteamname bold">' + m[i].shortTeam2 + '</span></div>';
-      html += '<div class="grid_1 tright">&nbsp;</div>';
+      html += '<div class="container_12 match">';
+      html += '<div class="grid_4"><span class="lteamname bold">' + m[i].shortTeam1 +
+              '</span><span class="icon icon-' + m[i].shortTeam1 +'"></span></div>';
+
+      if(finished) {
+        html += '<div class="grid_4 tcenter score">' + points1 + ':' + points2 + '</div>';
+      } else {
+        html += '<div class="grid_4 tcenter date">' + date + '</div>';
+      }
+
+      html += '<div class="grid_4 tright"><span class="icon icon-' + m[i].shortTeam2 +'">' +
+              '</span><span class="rteamname bold">' + m[i].shortTeam2 + '</span></div>';
       html += '</div>'
       html += '</a>';
     }
@@ -195,49 +205,58 @@ function showMatchDay(matchday){
 }
 
 $('#seasonView a').live('click', function(){
-  console.log("clicked");
   var key = $(this).data('key');
   var position = $(this).data('position');
   var storage = $(this).data('storage');
 
   if(storage == "local") {
     var data = JSON.parse(localStorage.getItem(key))[position];
-    console.log(data);
+  } else {
+    var data = JSON.parse(sessionStorage.getItem(key))[position];
   }
 
-//  $('#matchPage .header').html('<h1>' + data.shortTeam1 + ' ' + data.shortTeam2 + '</h1>');
-  var head = '<fieldset class="container_12 content_header">' +
-               '<div class="grid_12 tcenter"><strong>' + data.matchDateTime +'</strong></div>' +
-             '</fieldset>';
+  console.log(Object.keys(data.goals).length);
+  console.log(data.goals);
+
+  data.pointsTeam1 != '-1'? points1 = data.pointsTeam1 : points1 = '--';
+  data.pointsTeam2 != '-1'? points2 = data.pointsTeam2 : points2 = '--';
 
   var html = '';
-  html += '<fieldset class="container_12 content_header matchinfo">';
+  html += '<fieldset class="container_12 matchinfo">';
+
   html += '<div class="grid_1 tleft">&nbsp;</div>';
   html += '<div class="grid_4 tright"><span class="lteamname bold">' + data.shortTeam1 + '</span><span class="icon icon-' + data.shortTeam1 +'"></span></div>';
-  html += '<div class="grid_2 tcenter score">' + data.pointsTeam1 + ':' + data.pointsTeam2 + '</div>';
+  html += '<div class="grid_2 tcenter score">' + points1 + ':' + points2 + '</div>';
   html += '<div class="grid_4 tleft"><span class="icon icon-' + data.shortTeam2 +'"></span><span class="rteamname bold">' + data.shortTeam2 + '</span></div>';
   html += '<div class="grid_1 tright">&nbsp;</div>';
-//  html += '</fieldset>'
-
-//  html += '<fieldset class="container_12 content_header">';
 
   html += '<div class="grid_12">&nbsp;</div>';
 
-  html += '<div class="grid_5">Player</div>';
-  html += '<div class="grid_2 tcenter">0"</div>';
-  html += '<div class="grid_5 tright">--</div>';
+  if(Object.keys(data.goals).length > 0) {
+    for(var i=0; i< points1; i++) {
+      html += '<div class="grid_5 tright"><span class="scorer">' + data.goals[data.idTeam1][i].goalScorer + '</span></div>';
+      html += '<div class="grid_2 tcenter">' + data.goals[data.idTeam1][i].goalMatchMinute + '"</div>';
+      html += '<div class="grid_5 empty">-</div>';
+    }
+  }
 
-  html += '<div class="grid_5">--</div>';
-  html += '<div class="grid_2 tcenter">11"</div>';
-  html += '<div class="grid_5 tright">Player</div>';
-
-  html += '<div class="grid_5">T1</div>';
-  html += '<div class="grid_2 tcenter">33"</div>';
-  html += '<div class="grid_5 tright">T2</div>';
+  if(Object.keys(data.goals).length > 0) {
+    for(var i=0; i< points2; i++) {
+      html += '<div class="grid_5 empty">-</div>';
+      html += '<div class="grid_2 tcenter">' + data.goals[data.idTeam2][i].goalMatchMinute + '"</div>';
+      html += '<div class="grid_5 tleft">' +
+                '<span class="scorer"><span class="arrow-left"></span>' + data.goals[data.idTeam2][i].goalScorer + '</span>' +
+              '</div>';
+    }
+  }
 
   html += '</fieldset>';
 
-  $("#matchView").html(head + html);
+  html += '<fieldset class="container_12 matchinfo">';
+  html += '<div class="grid_12 tleft">Spieldatum: ' + data.matchDateTime + '</div>';
+  html += '</fieldset>';
+
+  $("#matchView").html(html);
   $.mobile.changePage($("#matchPage"));
 });
 

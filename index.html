@@ -32,7 +32,7 @@
     <script>
       $(document).ready(function() {
 //        localStorage.clear();
-//        sessionStorage.clear();
+  //      sessionStorage.clear();
 
         index();
         season(0);
@@ -83,8 +83,9 @@
   </head>
   <body>
     <div id="indexPage" data-role="page" data-theme="z">
-      <div data-role="header" data-theme="z">
-        <h1>Tabelle</h1>
+      <div data-role="header" data-theme="z" data-position="inline">
+        <h1>Bundesliga2Go</h1>
+        <a href="#settingsPage" class="ui-btn-right" data-iconpos="notext" data-icon="gear" data-inline="true" data-transition="slideUp" ></a>
       </div>
 
       <div data-role="content" id="index-content">
@@ -100,8 +101,8 @@
         <fieldset id="indexView" class="container_12"> <!-- scores table --></fieldset>
       </div>
 
-      <div data-role="footer" data-theme="z" >
-        <div data-role="navbar" data-iconpos="top">
+      <div data-role="footer" data-position="fixed" data-theme="z" >
+        <div data-role="navbar" data-position="fixed" data-iconpos="top">
           <ul>
             <li><a id="indexLink" href="#" class="ui-btn-active" data-icon="grid">Tabelle</a></li>
             <li><a id="seasonLink" href="#" data-icon="star">Spieltage</a></li>
@@ -120,8 +121,8 @@
         <fieldset id="seasonView" class="container_12" style="padding:4px 10px;"></fieldset>
       </div>
 
-      <div data-role="footer" data-theme="z" >
-        <div data-role="navbar" data-iconpos="top">
+      <div data-role="footer" data-position="fixed" data-theme="z" >
+        <div data-role="navbar" data-position="fixed" data-iconpos="top">
           <ul>
             <li id="indexLink"><a href="#" data-icon="grid">Tabelle</a></li>
             <li id="seasonLink"><a href="#" data-icon="star">Spieltage</a></li>
@@ -137,9 +138,6 @@
       </div>
 
       <div id="matchView" data-role="content">
-        <fieldset class="container_12 content_header">
-          <div class="grid_12 tcenter">Fr, 20.11.2011 15:30</div>
-        </fieldset>
         <fieldset id="matchContent" class="container_12" style="padding:4px 10px;"></fieldset>
       </div>
 
@@ -155,14 +153,28 @@
         <fieldset id="seasonView" class="container_12" style="padding:4px 10px;"></fieldset>
       </div>
 
-      <div data-role="footer" data-theme="z" >
-        <div data-role="navbar" data-iconpos="top">
+      <div data-role="footer" data-position="fixed" data-theme="z" >
+        <div data-role="navbar" data-position="fixed" data-iconpos="top">
           <ul>
             <li id="indexLink"><a href="#indexPage" data-icon="grid">Tabelle</a></li>
             <li id="seasonLink"><a href="#seasonPage" data-icon="star">Spieltage</a></li>
             <li id="tickerLink"><a href="#tickerPage" data-icon="refresh">Ticker</a></li>
           </ul>
         </div>
+      </div>
+    </div>
+
+    <div id="settingsPage" data-role="page" data-add-back-btn="true" data-theme="z">
+      <div data-role="header" data-theme="z">
+        <h1>Einstellungen</h1>
+      </div>
+
+      <div data-role="content">
+        <a href="#" data-role="button" data-iconpos="right" data-icon="minus">Favoriten zurücksetzen</a>
+      </div>
+
+      <div class="footer" data-role="footer" data-position="fixed" data-theme="z" >
+        <div>&copy; Vladislav Lewin & Ciaran Farrell</div>
       </div>
     </div>
 

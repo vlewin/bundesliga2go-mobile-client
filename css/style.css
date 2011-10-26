@@ -21,8 +21,7 @@
 }
 
 .even, .odd {
-  background: #474747;
-  line-height:32px;
+
 }
 
 #indexPage { color: #fafafa; }
@@ -45,13 +44,59 @@
   border-radius:15px;
   opacity:0.4;
 }
-#seasonView span.icon, #matchView span.icon { margin:0px 5px; }
-#seasonView span.lteamname, #matchView span.lteamname { padding-right: 10px; }
-#seasonView span.rteamname, #matchView span.rteamname { padding-left: 10px; }
-#seasonView div { line-height:32xpx; margin: 5px 0px; }
+
+#seasonView .match { background: #474747; line-height:32px;  border-radius:3px; border:1px solid #2a2a2a; }
+#seasonView span.icon, #matchView span.icon { margin:0px 0px; }
+#seasonView span.lteamname, #matchView span.lteamname { display:inline-block; min-width:30px; padding: 0px 5px; }
+#seasonView span.rteamname, #matchView span.rteamname { display:inline-block; min-width:30px; padding: 0px 5px; }
+#seasonView div { margin: 5px 0px; }
 #seasonView .score, #matchView .score { line-height:32px; font-size: 24px; }
+#seasonView .date { line-height:32px; font-size: 10px; font-weight:bold; text-shadow: 0px -1px #000; }
 #seasonView a { color: #fff; text-decoration: none; }
 
 #matchView fieldset { margin:10px 0px; }
-#matchView fieldset.matchinfo { margin-top:20px; }
+#matchView fieldset.matchinfo { border:1px solid #2a2a2a; padding:5px 5px; border-radius:3px; background: #474747; }
+#matchView fieldset.matchinfo div { margin:5px 0px; }
+#matchView .goal { margin: 5px 0px; }
+#matchView .empty { color:#474747; text-shadow: none; }
+#matchView .scorer {
+  display:inline-block;
+  background:#333;
+  width:80%;
+  padding:0px 5px;
+  font-weight:bold;
+  position:relative;
+/*  height:20px;*/
+}
+
+span.arrow-right {
+  position:absolute;
+  right:-11px;
+  top:0;
+  display:inline-block;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid #474747;
+}
+
+span.arrow-left {
+  position:absolute;
+  left:-11px;
+  top:0;
+  display:inline-block;
+  width: 0;
+  height: 0;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-right: 12px solid #474747;
+}
+
+
+#settingsPage .footer {
+  font-size:11px;
+  padding:10px 0px;
+  text-align:center;
+}
 
