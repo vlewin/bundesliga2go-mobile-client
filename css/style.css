@@ -1,15 +1,10 @@
-.empty { }
-
 .tleft { text-align:left; }
 .tcenter { text-align:center; }
 .tright { text-align:right; }
 .bold { font-weight: bold; }
 .spacer { height:10px; margin:5px 0px; }
 .undeline { height:1px; margin:2px 0px; border-bottom:1px solid #666; }
-
 .row { background:#333; line-height:32px; }
-
-
 
 .content_header {
   background:#353535;
@@ -20,17 +15,35 @@
   padding:8px 0px!important;
 }
 
-.even, .odd {
-
-}
-
 #indexPage { color: #fafafa; }
+#indexPage a { color: #fff; text-decoration: none;}
 #indexView span.icon { margin:0px 0px 0px 0px; }
 #indexView span.team { margin:0px 0px 0px 5px; }
 #indexView div { line-height:36px; margin:2px 0px; }
 #indexView div.bold { font-weight:bold; text-shadow: 0px -1px #000; }
 #indexView div .score { font-size:24px;}
-#indexView .number { display: inline-block; color: #999; font-size:9px; }
+
+#indexView .relative { position:relative; }
+
+#indexView .number {
+  display: inline-block;
+  color: #999;
+  font-size:9px;
+  color: #fff;
+  text-align:center;
+  font-weight: bold;
+  background:#444;
+  width: 16px;
+  height: 16px;
+  line-height:16px;
+  text-shadow: 0px 1px #fff;
+  text-shadow: none;
+/*  opacity:0.4;*/
+  font-size:8px;
+  margin-top: 10px;
+  border-radius:16px;
+}
+
 #indexView .best {
   color: #000;
   text-align:center;
@@ -40,28 +53,32 @@
   height: 16px;
   line-height:16px;
   text-shadow: 0px 1px #fff;
-/*  text-shadow: none;*/
   opacity:0.4;
   font-size:8px;
   margin-top: 10px;
   border-radius:16px;
 }
 
-#indexView .fav {
-  color: #fff;
-  text-align:center;
-  font-weight: bold;
-  background:#666;
-  width: 16px;
-  height: 16px;
-  line-height:16px;
-  text-shadow: 0px 1px #fff;
-  text-shadow: none;
-  opacity:0.4;
-  font-size:8px;
-  margin-top: 10px;
-  border-radius:16px;
-}
+/*#indexView .fav {*/
+/*  position:absolute;*/
+/*  right:0;*/
+/*  top:0;*/
+
+/*  color: #fff;*/
+/*  text-align:center;*/
+/*  font-weight: bold;*/
+/*  background:#666;*/
+/*  width: 16px;*/
+/*  height: 16px;*/
+/*  line-height:16px;*/
+/*  text-shadow: 0px 1px #fff;*/
+/*  text-shadow: none;*/
+/*  opacity:0.4;*/
+/*  font-size:8px;*/
+/*  margin-top: 10px;*/
+/*  border-radius:16px;*/
+/*  background: url(../img/add.png) no-repeat top left transparent;*/
+/*}*/
 
 #seasonView .match { background: #474747; line-height:32px;  border-radius:3px; border:1px solid #2a2a2a; }
 #seasonView span.icon, #matchView span.icon { margin:0px 0px; }
@@ -76,11 +93,15 @@
 #matchView fieldset.matchinfo { border:1px solid #2a2a2a; padding:5px 5px; border-radius:3px; background: #474747; }
 #matchView fieldset.matchinfo div { margin:5px 0px; }
 #matchView .goal { margin: 5px 0px; }
-#matchView .empty { color:#474747; text-shadow: none; }
+#matchView .empty { background-color:#474747; color:#474747; text-shadow: none; }
+#matchView .row {
+  line-height:24px;
+}
+
 #matchView .scorer {
   display:inline-block;
   background:#333;
-  width:80%;
+  width:75%;
   padding:0px 5px;
   font-weight:bold;
   position:relative;

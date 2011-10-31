@@ -57,24 +57,30 @@ function showScoresTable(){
 
   var table = '';
   for(i=0; i<18; i++) {
+    table += '<a href="#favoritesPage" data-rel="dialog" data-transition="pop" class="addFavorite">';
+
     if(i<3) {
       table += '<div class="grid_1 tcenter"><span class="number best">' + (i+1) + '</span></div>';
     } else {
-      table += '<div class="grid_1 tcenter"><span class="number fav">' + (i+1) +'</span></div>';
+      table += '<div class="grid_1 tcenter"><span class="number">' + (i+1) +'</span></div>';
     }
     table += '<div class="grid_3 tleft bold">' +
-      '<span class="icon icon-' + teams[scores[i].id].teamShortcut +'"></span>' +
-      '<span class="team">' + teams[scores[i].id].teamShortcut + '</span>' +
-   '</div>';
+                '<span class="icon icon-' + teams[scores[i].id].teamShortcut +'"></span>' +
+                '<span class="team">' + teams[scores[i].id].teamShortcut + '</span>' +
+             '</div>';
 
     table += '<div class="grid_2 tcenter">' + scores[i].played + '</div>';
     table += '<div class="grid_2 tcenter">' + scores[i].won + '</div>';
     table += '<div class="grid_2 tcenter">' + scores[i].lost + '</div>';
     table += '<div class="grid_2 tcenter bold">' + scores[i].points + '</div>';
+//    table += '<div class="grid_2 tcenter relative bold">' + scores[i].points + '<span class="fav">&nbsp;</span></div>';
+    table += '</a>';
 
     var tmp = i+1;
     if(tmp%5==0) { table += '<div class="grid_12 undeline"></div>' };
   }
+
+
 
   $('#indexView').html(table);
 }
@@ -104,16 +110,7 @@ function index() {
   }
 }
 
+$('#addFavorite').click(function() {
 
-$('#resetFavorites').live('click', function() {
-  alert(":) is not implemented")
-});
-
-
-$('#resetCache').live('click', function() {
-  window.sessionStorage.clear();
-  window.localStorage.clear();
-//  index();
-//  season(0);
 });
 

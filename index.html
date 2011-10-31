@@ -28,11 +28,13 @@
     <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.0rc1/jquery.mobile-1.0rc1.min.js"></script>
     <script src="js/index.js"></script>
-    <script src="js/season.js"></script>
+    <script src="js/settings.js"></script>
+<!--    <script src="js/season.js"></script>-->
+
     <script>
       $(document).ready(function() {
         index();
-        season(0);
+<!--        season(0);-->
 
         $('#indexLink').live('click', function() {
           index();
@@ -74,6 +76,7 @@
               simulateSwipe('left');
             }
           })
+
       });
       </script>
 
@@ -173,6 +176,16 @@
 
       <div class="footer" data-role="footer" data-position="fixed" data-theme="z" >
         <div>&copy; Vladislav Lewin & Ciaran Farrell</div>
+      </div>
+    </div>
+
+    <div id="favoritesPage" data-role="page" data-theme="z">
+      <div data-role="header" data-theme="z">
+        <h1>Favoriten</h1>
+      </div>
+
+      <div data-role="content">
+        Content
       </div>
     </div>
 

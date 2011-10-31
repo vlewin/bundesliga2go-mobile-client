@@ -225,15 +225,15 @@ $('#seasonView a').live('click', function(){
 
   for(i in data.goals) {
     if(data.goals[i].goalForTeamID == data.idTeam1) {
-      html += '<div class="grid_5 tright">' +
+      html += '<div class="grid_5 row tright">' +
                 '<span class="scorer">' + data.goals[i].goalGetterName + '</span>' +
               '</div>';
-      html += '<div class="grid_2 tcenter">' + data.goals[i].goalMatchMinute + '"</div>';
-      html += '<div class="grid_5 empty">-</div>';
+      html += '<div class="grid_2 row tcenter">' + data.goals[i].goalMatchMinute + '"</div>';
+      html += '<div class="grid_5 row empty">-</div>';
     } else {
-      html += '<div class="grid_5 empty">-</div>';
-      html += '<div class="grid_2 tcenter">' + data.goals[i].goalMatchMinute + '"</div>';
-      html += '<div class="grid_5 tleft">' +
+      html += '<div class="grid_5 row empty">-</div>';
+      html += '<div class="grid_2 row tcenter">' + data.goals[i].goalMatchMinute + '"</div>';
+      html += '<div class="grid_5 row tleft">' +
                 '<span class="scorer"><span></span>' + data.goals[i].goalGetterName + '</span>' +
               '</div>';
     }
