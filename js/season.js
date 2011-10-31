@@ -205,11 +205,12 @@ $('#seasonView a').live('click', function(){
     var data = JSON.parse(sessionStorage.getItem(key))[position];
   }
 
-  console.log(Object.keys(data.goals).length);
-  console.log(data.goals);
-
   data.pointsTeam1 != '-1'? points1 = data.pointsTeam1 : points1 = '--';
   data.pointsTeam2 != '-1'? points2 = data.pointsTeam2 : points2 = '--';
+
+  console.log(data)
+
+
 
   var html = '';
   html += '<fieldset class="container_12 matchinfo">';
@@ -222,20 +223,18 @@ $('#seasonView a').live('click', function(){
 
   html += '<div class="grid_12">&nbsp;</div>';
 
-  if(Object.keys(data.goals).length > 0) {
-    for(var i=0; i< points1; i++) {
-      html += '<div class="grid_5 tright"><span class="scorer">' + data.goals[data.idTeam1][i].goalScorer + '</span></div>';
-      html += '<div class="grid_2 tcenter">' + data.goals[data.idTeam1][i].goalMatchMinute + '"</div>';
+  for(i in data.goals) {
+    if(data.goals[i].goalForTeamID == data.idTeam1) {
+      html += '<div class="grid_5 tright">' +
+                '<span class="scorer">' + data.goals[i].goalGetterName + '</span>' +
+              '</div>';
+      html += '<div class="grid_2 tcenter">' + data.goals[i].goalMatchMinute + '"</div>';
       html += '<div class="grid_5 empty">-</div>';
-    }
-  }
-
-  if(Object.keys(data.goals).length > 0) {
-    for(var i=0; i< points2; i++) {
+    } else {
       html += '<div class="grid_5 empty">-</div>';
-      html += '<div class="grid_2 tcenter">' + data.goals[data.idTeam2][i].goalMatchMinute + '"</div>';
+      html += '<div class="grid_2 tcenter">' + data.goals[i].goalMatchMinute + '"</div>';
       html += '<div class="grid_5 tleft">' +
-                '<span class="scorer"><span class="arrow-left"></span>' + data.goals[data.idTeam2][i].goalScorer + '</span>' +
+                '<span class="scorer"><span></span>' + data.goals[i].goalGetterName + '</span>' +
               '</div>';
     }
   }
