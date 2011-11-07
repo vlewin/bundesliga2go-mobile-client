@@ -8,3 +8,5 @@ $('#resetCache').live('click', function() {
   window.localStorage.clear();
 });
 
+//JQuery Mobile Notify
+//http://square-bracket.com/jqMobileNotify
