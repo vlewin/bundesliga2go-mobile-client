@@ -1,10 +1,12 @@
+var tDebug = true;
+
 $.tickerQueue = function(args) {
   var def = $.Deferred(function(dfd) {
     var worker;
     var failure=0;
 
     if (window.Worker) {
-      console.log("AJAX call through web workers")
+      if(tDebug) console.log("AJAX call through web workers")
 
       var worker = new Worker("js/ajax-worker.js");
 
@@ -17,17 +19,18 @@ $.tickerQueue = function(args) {
             dfd.reject(event);
           }
         } else {
+          if(tDebug) console.log("Event data " + event.data);
           switch (event.data.key) {
             case "maxGoalID":
-              console.log("MaxGoalID");
+              if(tDebug) console.log("MaxGoalID");
               break;
 
             case "matchday":
-              console.log("MaxGoalID");
+              if(tDebug) console.log("MaxGoalID");
               break;
 
             default:
-              console.log("ERROR: unknown key " + event.data.key)
+              if(tDebug) console.log("ERROR: unknown key " + event.data.key)
               break;
           }
           dfd.resolve();
@@ -35,24 +38,24 @@ $.tickerQueue = function(args) {
       };
 
       worker.onerror = function(event) {
-        console.log("FAILED")
+        if(tDebug) console.log("FAILED")
         dfd.reject(event);
       };
 
       worker.postMessage(args.args); 
 
     } else {
-      console.log("AJAX call in main thread")
+      if(tDebug) console.log("AJAX call in main thread")
    
       var request = $.getJSON(args.args.url);
    
       request.success(function(data) {
-        console.log("Request 200");  
+        if(tDebug) console.log("Request 200");  
         dfd.resolve();
       });
 
       request.error(function(data) {
-        console.log("AJAX error!")
+        if(tDebug) console.log("AJAX error!")
         dfd.reject();
       });
 
@@ -70,19 +73,19 @@ function show(){
 
 function liveticker() {
    
-  var sworker1 = $.seasonQueue({
+  var tworker1 = $.seasonQueue({
     file: 'js/ajax-worker.js',
     args: { url: "http://foxhall.de:8088/api/maxgoalid", key: "maxGoalID" }
   });
 
-  var sworker2 = $.seasonQueue({
+  var tworker2 = $.seasonQueue({
     file: 'js/ajax-worker.js',
     args: { url: "http://foxhall.de:8088/api/matches/inprogress/", key: "matchesInProgress" }
   });
 
-  $.when(sworker1, sworker2)
+  $.when(tworker1, tworker2)
     .done(function(result1){
-     console.log("Both workers are done, handle data from workers!");
+     if(tDebug) console.log("Both workers are done, handle data from workers!");
      show();
      return true;
    })
@@ -105,7 +108,7 @@ function liveticker() {
 //  var request = $.getJSON("http://foxhall.de:8088/getGoalsSinceGoalID");
 //  
 //  $('#tickerView').html(data);
-//  console.log(data);
+//  if(tDebug) console.log(data);
 //}
 //
 //function getMatchesInProgress() {
@@ -127,7 +130,7 @@ function liveticker() {
 //    var socket = new WebSocket(host);
 //    
 //    socket.onopen = function() {
-//      console.log("INFO: socket opened!");
+//      if(tDebug) console.log("INFO: socket opened!");
 //    }
 //
 //    socket.onmessage = function(msg) {
@@ -135,18 +138,18 @@ function liveticker() {
 //    }
 //
 //    socket.onclose = function() {
-//      console.log("INFO: socket closed!")
+//      if(tDebug) console.log("INFO: socket closed!")
 //    }			
 //
 //  } catch(exception) { 		 
-//    console.log("ERROR: " + exception);
+//    if(tDebug) console.log("ERROR: " + exception);
 //  }
 //}
 //
 //function ticker() {
 //  $.when(wscheck(), connect())
 //    .done(function(result){
-//      console.log("WebSocket in window " + result);
+//      if(tDebug) console.log("WebSocket in window " + result);
 //      return true;
 //    })
 //    

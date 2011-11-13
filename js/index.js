@@ -1,3 +1,5 @@
+var iDebug = false;
+
 $.indexQueue = function(args) {
   var def = $.Deferred(function(dfd) {
     var worker;
@@ -11,9 +13,9 @@ $.indexQueue = function(args) {
           if(failure < 2) {
             worker.postMessage(args.args);
             failure++;
-            console.log("Worker returns: " + event.data.type + ' and failure is ' + failure);
+            if(iDebug) console.log("Worker returns: " + event.data.type + ' and failure is ' + failure);
           } else {
-            console.log("Do not try again");
+            if(iDebug) console.log("Do not try again");
             dfd.reject(event);
           }
         } else {
@@ -24,24 +26,25 @@ $.indexQueue = function(args) {
       };
 
       worker.onerror = function(event) {
-        console.log("FAILED")
+        if(iDebug) console.log("FAILED");
         dfd.reject(event);
       };
 
       worker.postMessage(args.args); //Start the worker with supplied args
 
     } else {
-      console.log("ERROR: WEB WORKERS ARE NOT SUPPORTED!");
+      if(iDebug) console.log("ERROR: WEB WORKERS ARE NOT SUPPORTED!");
+      
       var request = $.getJSON(args.args.url);
       request.success(function(data) {
-        console.log("AJAX call succeeded!");
+        if(iDebug) console.log("AJAX call succeeded!");
         localStorage.setItem(args.args.key, JSON.stringify(data));
         sessionStorage.setItem("tableSynced", "true");
         dfd.resolve(data);
       })
 
       request.error(function(data) {
-        console.log("AJAX call failed " + args.args.url + args.args.key);
+        if(iDebug) console.log("AJAX call failed " + args.args.url + args.args.key);
         dfd.reject(event);
       })
     }
@@ -51,7 +54,7 @@ $.indexQueue = function(args) {
 };
 
 function showScoresTable(){
-  console.log("show table")
+  if(iDebug) console.log("show table")
   var scores = JSON.parse(localStorage.getItem("scores"));
   var teams = JSON.parse(localStorage.getItem("teams"));
 
@@ -86,26 +89,27 @@ function showScoresTable(){
 }
 
 function index() {
-  console.log(sessionStorage.getItem("tableSynced"));
+  if(iDebug) console.log(sessionStorage.getItem("tableSynced"));
   if(sessionStorage.getItem("tableSynced") != "true") {
-    console.log("Not synced yet, get data from server!");
+    if(iDebug) console.log("Not synced yet, get data from server!");
+    
     var iworker1 = $.indexQueue({file: 'js/ajax-worker.js', args: { url: "http://foxhall.de:8088/api/teams", key: "teams" }});
     var iworker2 = $.indexQueue({file: 'js/ajax-worker.js', args: { url: "http://foxhall.de:8088/api/table", key: "scores" }});
 
     $.when(iworker1, iworker2)
       .done(function(result1, result2){
-        console.log("Both workers are done, handle data from workers!");
+        if(iDebug) console.log("Both workers are done, handle data from workers!");
         showScoresTable();
         return true;
       })
 
       .fail(function(data){
-        console.info("HANDLE ERRORS!!!!");
+        if(iDebug) console.log("HANDLE ERRORS!!!!");
         return false;
       });
 
   } else {
-    console.log("Already synced with server!");
+    if(iDebug) console.log("Already synced with server!");
     showScoresTable();
   }
 }

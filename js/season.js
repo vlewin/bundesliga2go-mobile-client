@@ -1,12 +1,12 @@
+var sDebug = false;
+
 $.seasonQueue = function(args) {
   var def = $.Deferred(function(dfd) {
     var worker;
     var failure=0;
 
     if (window.Worker) {
-//    if (!true) {
-      console.log("AJAX call through web workers")
-
+      if(sDebug) console.log("AJAX call through web workers")
       var worker = new Worker("js/ajax-worker.js");
 
       worker.onmessage = function(event) {
@@ -23,24 +23,24 @@ $.seasonQueue = function(args) {
               var cmd = JSON.parse(event.data.json).cmd;
 
               if(localStorage.getItem("cmd") === null) {
-                console.log("CMD is not set, set CMD to " + cmd);
+                if(sDebug) console.log("CMD is not set, set CMD to " + cmd);
                 localStorage.setItem("cmd", cmd);
               } else {
 
                 if(cmd != localStorage.getItem("cmd")) {
-                  console.log("CMD is outdated, new CMD is " + cmd);
+                  if(sDebug) console.log("CMD is outdated, new CMD is " + cmd);
                   localStorage.setItem("cmd", cmd);
                 } else {
-                  console.log("CMD is up-to-date " + cmd);
+                  if(sDebug) console.log("CMD is up-to-date " + cmd);
                 }
               }
 
               break;
 
             case "matchday":
-              console.log("GET MATCHDAY FROM SERVER");
-              console.log(JSON.parse(event.data.json)[0].matchIsFinished) /// get string instead of object ???
-              console.log(typeof(JSON.parse(event.data.json)[0].matchIsFinished))
+              if(sDebug) console.log("GET MATCHDAY FROM SERVER");
+              if(sDebug) console.log(JSON.parse(event.data.json)[0].matchIsFinished) /// get string instead of object ???
+              if(sDebug) console.log(typeof(JSON.parse(event.data.json)[0].matchIsFinished))
 
               if(event.data.options == "0") {
                 var key = event.data.key + localStorage.getItem("cmd");
@@ -49,17 +49,17 @@ $.seasonQueue = function(args) {
               }
 
               if(JSON.parse(event.data.json)[0].matchIsFinished) {
-                console.log("match date is finished");
+                if(sDebug) console.log("match date is finished");
                 localStorage.setItem(key, event.data.json);
               } else {
-                console.log("match date is not finished");
+                if(sDebug) console.log("match date is not finished");
                 sessionStorage.setItem(key, event.data.json);
               }
 
               break;
 
             default:
-              console.log("ERROR: unknown key " + event.data.key)
+              if(sDebug) console.log("ERROR: unknown key " + event.data.key)
               break;
           }
           dfd.resolve();
@@ -67,14 +67,14 @@ $.seasonQueue = function(args) {
       };
 
       worker.onerror = function(event) {
-        console.log("FAILED")
+        if(sDebug) console.log("FAILED")
         dfd.reject(event);
       };
 
       worker.postMessage(args.args); //Start the worker with supplied args
 
     } else {
-      console.log("AJAX call in main thread")
+      if(sDebug) console.log("AJAX call in main thread")
       if(args.args.key == "matchday") { args.args.url = args.args.url + args.args.options; }
       var request = $.getJSON(args.args.url);
 
@@ -82,17 +82,17 @@ $.seasonQueue = function(args) {
 
         switch (args.args.key) {
           case "cmd":
-            console.log(data.cmd)
+            if(sDebug) console.log(data.cmd)
             var cmd = data.cmd;
 
             if(localStorage.getItem("cmd") === null) {
-              console.log("CMD is not set " + cmd);
-              console.log("Typeof " + typeof(cmd) + " value " + cmd)
+              if(sDebug) console.log("CMD is not set " + cmd);
+              if(sDebug) console.log("Typeof " + typeof(cmd) + " value " + cmd)
               localStorage.setItem("cmd", JSON.stringify(data.cmd));
             } else {
               if(cmd != localStorage.getItem("cmd")) {
-                console.log("CMD is outdated, new CMD is " + cmd);
-                console.log("Typeof " + typeof(cmd) + " value " + cmd)
+                if(sDebug) console.log("CMD is outdated, new CMD is " + cmd);
+                if(sDebug) console.log("Typeof " + typeof(cmd) + " value " + cmd)
                 localStorage.setItem("cmd", JSON.stringify(data.cmd));
               }
             }
@@ -100,7 +100,7 @@ $.seasonQueue = function(args) {
             break;
 
           case "matchday":
-            console.log(typeof(data))
+            if(sDebug) console.log(typeof(data))
 
             if(args.args.options == "0") {
               var key = args.args.key + localStorage.getItem("cmd");
@@ -109,17 +109,17 @@ $.seasonQueue = function(args) {
             }
 
             if(data[0].matchIsFinished) {
-              console.log("match date is finished");
+              if(sDebug) console.log("match date is finished");
               localStorage.setItem(key, JSON.stringify(data));
             } else {
-              console.log("match date is not finished");
+              if(sDebug) console.log("match date is not finished");
               sessionStorage.setItem(key, JSON.stringify(data));
             }
 
             break;
 
           default:
-            console.log("ERROR: unknown key " + args.args.key)
+            if(sDebug) console.log("ERROR: unknown key " + args.args.key)
             break;
           }
 
@@ -127,7 +127,7 @@ $.seasonQueue = function(args) {
       });
 
       request.error(function(data) {
-        console.log("AJAX error!")
+        if(sDebug) console.log("AJAX error!")
         dfd.reject();
       });
 
@@ -138,7 +138,7 @@ $.seasonQueue = function(args) {
 };
 
 function showMatchDay(matchday){
-  console.log("show matchday " + matchday);
+  if(sDebug) console.log("show matchday " + matchday);
 
   if(matchday == 0) { matchday = JSON.parse(localStorage.getItem("cmd")); }
 
@@ -147,16 +147,16 @@ function showMatchDay(matchday){
   var storage;
 
   if(key in localStorage) {
-    console.log("key in ls")
+    if(sDebug) console.log("key in ls")
     var m = JSON.parse(localStorage.getItem(key));
     storage = "local";
 
   } else if(key in sessionStorage) {
-    console.log("key in ss")
+    if(sDebug) console.log("key in ss")
     var m = JSON.parse(sessionStorage.getItem(key));
     storage = "session";
   } else {
-    console.log("key not found " + key)
+    if(sDebug) console.log("key not found " + key)
     m = null;
   }
 
@@ -208,7 +208,7 @@ $('#seasonView a').live('click', function(){
   data.pointsTeam1 != '-1'? points1 = data.pointsTeam1 : points1 = '--';
   data.pointsTeam2 != '-1'? points2 = data.pointsTeam2 : points2 = '--';
 
-  console.log(data)
+  if(sDebug) console.log(data)
 
 
 
@@ -268,18 +268,18 @@ function season(matchday) {
 
     $.when(sworker1, sworker2)
       .done(function(result1){
-        console.log("Both workers are done, handle data from workers!");
+        if(sDebug) console.log("Both workers are done, handle data from workers!");
         showMatchDay(matchday);
         return true;
       })
 
       .fail(function(data){
-        console.info("HANDLE ERRORS!!!!");
+        if(sDebug) console.log("HANDLE ERRORS!!!!");
         return false;
       });
 
   } else {
-    console.log("Already synced with server " + matchday);
+    if(sDebug) console.log("Already synced with server " + matchday);
     showMatchDay(matchday);
   }
 }
