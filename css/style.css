@@ -105,10 +105,9 @@
   padding:0px 5px;
   font-weight:bold;
   position:relative;
-/*  height:20px;*/
 }
 
-span.arrow-right {
+/*span.arrow-right {
   position:absolute;
   right:-11px;
   top:0;
@@ -130,7 +129,7 @@ span.arrow-left {
   border-top: 12px solid transparent;
   border-bottom: 12px solid transparent;
   border-right: 12px solid #474747;
-}
+}*/
 
 
 #settingsPage .footer {
@@ -139,3 +138,8 @@ span.arrow-left {
   text-align:center;
 }
 
+#matchesTest .match { background: #474747; line-height:32px;  border-radius:3px; border:1px solid #2a2a2a; }
+#matchesTest span.icon, #matchView span.icon { margin:0px 0px; }
+#matchesTest span.lteamname, #matchView span.lteamname { display:inline-block; min-width:30px; padding: 0px 5px; }
+#matchesTest span.rteamname, #matchView span.rteamname { display:inline-block; min-width:30px; padding: 0px 5px; }
+#matchesTest div { margin: 5px 0px; }
