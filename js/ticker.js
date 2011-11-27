@@ -115,32 +115,25 @@ function updateMatchData(data){
   $('#'+matchID).css({'background-color':'red'});
 }
 
-//function wscheck() {
-//  var ws = false;
-//  if ("WebSocket" in window) {
-//    ws = true;
-//  }
-//  return ws;
-//}
-
 function connect(){
   console.log("Try to connect to WS")
   try{
-	  var socket;
-	  var host = "ws://foxhall.de:4040";
+	var socket;
+    var host = "ws://foxhall.de:4040";
 	  
-	  if ('MozWebSocket' in window) {
+	if ('MozWebSocket' in window) {
       var socket = new MozWebSocket(host);
     } else if('WebSocket' in window) {
       var socket = new WebSocket(host);
     }  else {
+      $('#tickerView').html("<p class='tCenter'>Neither WebSocket nor MozWebSocket is supported!</p>").css('background', 'red');    
       console.log("Neither WebSocket nor MozWebSocket is supported!");
     }
     
-    
     socket.onopen = function() {
       if(tDebug) console.log("INFO: socket opened!");
-      $('#tickerPage h1').html("Verbunden").css('background', 'green');
+      $('#tickerPage h1').css('background', 'green');
+      return true;
     }
 
     socket.onmessage = function(msg) {
@@ -156,18 +149,40 @@ function connect(){
     }
 
     socket.onclose = function() {
-      if(tDebug) console.log("INFO: socket closed!")
-      $('#tickerPage h1').html("Keine Verbindung!").css('background', 'red');
+      if(tDebug) console.error("INFO: socket closed!")
+      //$('#tickerPage h1').css('background', 'red');
+      
       
       //TODO: RECONNECT IN 15 SECONDS
-      //TODO: STORE AND INCREASE RECONNECTION ATTEMPTS in LOCAL STORAGE
-      //TODO: DO NOT TRY AGAIN IF RECONNECT FAILS SEMERAL TIMES {3}
-      var TIMEOUT = 5000;
-      timer = setInterval(function() { 
-        clearInterval(timer);
-        location.reload(true);
-        
-      }, TIMEOUT);
+      //TODO: STORE AND INCREASE RECONNECTION ATTEMPTS in SESSION STORAGE
+      //TODO: DO NOT TRY AGAIN IF RECONNECT FAILS SEVERAL TIMES {3}
+      var numberOfAttempts, message;
+      console.log(sessionStorage.getItem("numberOfAttempts"));
+      if("numberOfAttempts" in sessionStorage) {
+      	numberOfAttempts = parseInt(sessionStorage.getItem("numberOfAttempts"));
+      	sessionStorage.setItem("numberOfAttempts", parseInt(numberOfAttempts+1));
+      } else {
+      	sessionStorage.setItem("numberOfAttempts", 1);
+      }
+      
+      if(numberOfAttempts <= 3) {
+      	console.log("try again!");
+      	
+	    var TIMEOUT = 1;
+	    message = "<p class='tCenter'>FEHLER: Keine Verbindung zum WebSocket Server!</p>";
+	    message += "<p class='tCenter'>Wiederverbindung in " + (TIMEOUT * numberOfAttempts) + " Sekunden Versuch: " + numberOfAttempts;
+	    timer = setInterval(function() { 
+	      clearInterval(timer);
+	      //location.reload(true);
+	      liveticker();
+	    }, (TIMEOUT * 10000 * numberOfAttempts)); 
+	    $('#tickerView').html(message).css('background', 'red');
+	   } else {
+	   	 message = "<p class='tCenter'>Leider sind alle Versuche die Verbindung zum LiveTicker Server herzustellen gescheitert!</p>"
+	   	 sessionStorage.setItem("numberOfAttempts", 0);
+	   	 $('#tickerView').html(message).css('background', 'red');
+	   	 
+	   }
     }
 
   } catch(exception) { 		 
@@ -207,7 +222,7 @@ function showMatchesInProgress(matches){
       html += '</div>'
     }
 
-  $('#matchesTest').html(html);
+  $('#tickerView').html(html);
 }
 
 
@@ -226,10 +241,11 @@ function liveticker() {
   $.when(inprogress)  
     .done(function(matches){
       if(matches) {
-        connect();
-        showMatchesInProgress(matches);
+        if(connect()) {
+       	  showMatchesInProgress(matches);
+        }
       } else {
-        $('#matchesTest').html("Zur Zeit laufen keine Spiele!").css('background', '#333');
+        $('#tickerView').html("Zur Zeit laufen keine Spiele!").css('background', '#333');
       }
      return true;
    })
