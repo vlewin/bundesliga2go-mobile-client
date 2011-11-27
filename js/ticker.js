@@ -168,14 +168,14 @@ function connect(){
       if(numberOfAttempts <= 3) {
       	console.log("try again!");
       	
-	    var TIMEOUT = 1;
+	    var TIMEOUT = 10;
 	    message = "<p class='tCenter'>FEHLER: Keine Verbindung zum WebSocket Server!</p>";
 	    message += "<p class='tCenter'>Wiederverbindung in " + (TIMEOUT * numberOfAttempts) + " Sekunden Versuch: " + numberOfAttempts;
 	    timer = setInterval(function() { 
 	      clearInterval(timer);
 	      //location.reload(true);
 	      liveticker();
-	    }, (TIMEOUT * 10000 * numberOfAttempts)); 
+	    }, (TIMEOUT * 1000 * numberOfAttempts)); 
 	    $('#tickerView').html(message).css('background', 'red');
 	   } else {
 	   	 message = "<p class='tCenter'>Leider sind alle Versuche die Verbindung zum LiveTicker Server herzustellen gescheitert!</p>"
