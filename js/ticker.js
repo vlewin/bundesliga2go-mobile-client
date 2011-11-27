@@ -22,7 +22,7 @@ $.tickerQueue = function(args) {
         } else {
           if(tDebug) console.log(event.data);
           
-		  switch (event.data.key) {
+       switch (event.data.key) {
             case "maxGoalID":
               if(tDebug) console.log("MaxGoalID");
               break;
@@ -49,10 +49,11 @@ $.tickerQueue = function(args) {
     } else {
       if(tDebug) console.log("AJAX call in main thread")
    
-      var request = $.getJSON("http://foxhall.de:8088/api/goalssince");
+      var request = $.getJSON("http://foxhall.de:8088/api/matches/inprogress/");
    
       request.success(function(data) {
         if(tDebug) console.log("Request 200");  
+        console.log(data)
         dfd.resolve(data);
       });
 
@@ -68,29 +69,119 @@ $.tickerQueue = function(args) {
 };
 
 function updateMatchData(data){
-  var goal = JSON.parse(data);
+  console.log(data);
+//  var goal = JSON.parse(data);
   var matchID = 0;
   var teamID;
-  for(key in goal) {
-  	matchID = key;
-  	for(var i=0; i<goal[key].length; i++) {
-  	  state = parseInt($('#' + goal[key][i].goalForTeamID).html());
-  	  
-  	  if(state == "--") {
-  	  	$('#'+goal[key][i].goalForTeamID).html('1').css({'color':'#000', 'text-shadow':'0px 1px #ddd'});
-  	  } else {
-  	  	$('#'+goal[key][i].goalForTeamID).html(state+1).css({'color':'#000', 'text-shadow':'0px 1px #ddd'});
-  	  }
-  	}
+  var timeout = 60000;
+  
+  
+  for(var i=0; i<data.length; i++) {
+//    console.log("DATA");
+//    console.log(parseInt($('#' + data[i].goalForTeamID).html()));
+//    console.log(data[i].goalMatchID);
+    matchID = data[i].goalMatchID;
+    $('#'+matchID).css({'background-color':'red'});
+    console.log(matchID)
+    
+    score = $('#'+data[i].goalForTeamID).html();
+    teamID = data[i].goalForTeamID;
+    if(score == "--") {
+      $('#'+teamID).html('1');
+      $('#'+matchID + ' div.tcenter').css({
+        'font-size':'22px',
+        'font-weight':'bold'
+      });
+    } else {
+      $('#'+teamID).html(parseInt(score) + 1);
+      $('#'+matchID + ' div.tcenter').css({
+        'font-size':'22px',
+        'font-weight':'bold'
+      });
+      
+      //TODO: set timout to 60 seconds
+      timer = setInterval(function() { 
+        console.log("RESET");
+        $('#'+matchID).css({'background-color':'#474747'});
+        $('#'+matchID + ' div.tcenter').css({
+          'font-size':'14px',
+          'font-weight':'normal'
+        });
+       clearInterval(timer); //BUG: find out how to clear interval!!!
+      }, 10000);
+    }
   }
-  
+
   $('#'+matchID).css({'background-color':'red'});
-  
 }
 
-function showRunningMatches(matches){
+//function wscheck() {
+//  var ws = false;
+//  if ("WebSocket" in window) {
+//    ws = true;
+//  }
+//  return ws;
+//}
+
+function connect(){
+  console.log("Try to connect to WS")
+  try{
+	  var socket;
+	  var host = "ws://foxhall.de:4040";
+	  
+	  if ('MozWebSocket' in window) {
+      var socket = new MozWebSocket(host);
+    } else if('WebSocket' in window) {
+      var socket = new WebSocket(host);
+    }  else {
+      console.log("Neither WebSocket nor MozWebSocket is supported!");
+    }
+    
+    
+    socket.onopen = function() {
+      if(tDebug) console.log("INFO: socket opened!");
+      $('#tickerPage h1').html("Verbunden").css('background', 'green');
+    }
+
+    socket.onmessage = function(msg) {
+              
+      if(typeof(data) == "string") {
+        console.log("STRING: " + typeof(msg.data));
+      } else {
+        console.log("OBJECT: " + typeof(msg.data));
+        data = JSON.parse(msg.data);
+        updateMatchData(data);
+//        socket.close();
+      }
+    }
+
+    socket.onclose = function() {
+      if(tDebug) console.log("INFO: socket closed!")
+      $('#tickerPage h1').html("Keine Verbindung!").css('background', 'red');
+      
+      //TODO: RECONNECT IN 15 SECONDS
+      //TODO: STORE AND INCREASE RECONNECTION ATTEMPTS in LOCAL STORAGE
+      //TODO: DO NOT TRY AGAIN IF RECONNECT FAILS SEMERAL TIMES {3}
+      var TIMEOUT = 5000;
+      timer = setInterval(function() { 
+        clearInterval(timer);
+        location.reload(true);
+        
+      }, TIMEOUT);
+    }
+
+  } catch(exception) { 		 
+    if(tDebug) console.log("ERROR: " + exception);
+  }
+}
+
+
+function showMatchesInProgress(matches){
   var html = '';
-  var matches = JSON.parse(matches);
+  if(typeof(matches) == "string") {
+    var matches = JSON.parse(matches);
+  }
+  console.log(matches)
   var date = "sss"
 
     for(match in matches) {
@@ -119,28 +210,27 @@ function showRunningMatches(matches){
   $('#matchesTest').html(html);
 }
 
-function liveticker() {
+
+
+function updateTickerView(matchID) {
    
-  var tworker1 = $.tickerQueue({
-    file: 'js/ajax-worker.js',
-    args: { url: "http://foxhall.de:8088/api/maxgoalid", key: "maxGoalID" }
-  });
+}
 
-  var tworker2 = $.tickerQueue({
+function liveticker() {
+  var inprogress = $.tickerQueue({
     file: 'js/ajax-worker.js',
-    args: { url: "  http://foxhall.de:8088/api/matchday/13", key: "matchesInProgress" }    
-  });
-  
-  var tworker3 = $.tickerQueue({
-    file: 'js/ajax-worker.js',
-    args: { url: "http://foxhall.de:8088/api/goalssince/7912", key: "matchesInProgress" }
+    args: { url: "http://foxhall.de:8088/api/matches/inprogress/", key: "matchesInProgress" }
   });
   
 
-  $.when(tworker1, tworker2, tworker3)
-    .done(function(data1, matches, goals){
-     showRunningMatches(matches);
-     updateMatchData(goals);
+  $.when(inprogress)  
+    .done(function(matches){
+      if(matches) {
+        connect();
+        showMatchesInProgress(matches);
+      } else {
+        $('#matchesTest').html("Zur Zeit laufen keine Spiele!").css('background', '#333');
+      }
      return true;
    })
 
@@ -149,68 +239,4 @@ function liveticker() {
      return false;
     });
 }
-
-// 1. Get matches in progress and save in sessionStorage
-// 2. Get MaxGoalID from http://foxhall.de:8088/api/maxgoalid and save in localStorage
-// 3. Start listening for incoming goals (WebSocket) --- Fallback AJAX!!!
-//
-// Fallback: If none, show upcoming matches
-
-
-//function showResult(data) {
-//  
-//  var request = $.getJSON("http://foxhall.de:8088/getGoalsSinceGoalID");
-//  
-//  $('#tickerView').html(data);
-//  if(tDebug) console.log(data);
-//}
-//
-//function getMatchesInProgress() {
-//  
-//}
-//
-//function wscheck() {
-//  var ws = false;
-//  if ("WebSocket" in window) {
-//      ws = true;
-//  }
-//  return ws;
-//}
-//
-//function connect(){
-//  try{
-//	  var socket;
-//	  var host = "ws://foxhall.de:4040";
-//    var socket = new WebSocket(host);
-//    
-//    socket.onopen = function() {
-//      if(tDebug) console.log("INFO: socket opened!");
-//    }
-//
-//    socket.onmessage = function(msg) {
-//      showResult(msg.data);
-//    }
-//
-//    socket.onclose = function() {
-//      if(tDebug) console.log("INFO: socket closed!")
-//    }			
-//
-//  } catch(exception) { 		 
-//    if(tDebug) console.log("ERROR: " + exception);
-//  }
-//}
-//
-//function ticker() {
-//  $.when(wscheck(), connect())
-//    .done(function(result){
-//      if(tDebug) console.log("WebSocket in window " + result);
-//      return true;
-//    })
-//    
-//    .fail(function(data){
-//      console.info("HANDLE ERRORS!!!!");
-//      return false;
-//     });
-//}
-
 
